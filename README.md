@@ -2,7 +2,7 @@
 
 > The Acrobat wedge. Write in markdown · HTML · or plain text → real `.pdf` file. Single HTML, no server, no subscription.
 >
-> v1 · prime **449** · MIT · ◊·κ=1
+> v1 · prime **1427** · MIT · ◊·κ=1
 
 **Live:** [sjgant80-hub.github.io/fallpdf](https://sjgant80-hub.github.io/fallpdf/)
 **Source:** [github.com/sjgant80-hub/fallpdf](https://github.com/sjgant80-hub/fallpdf)
@@ -74,7 +74,7 @@ Auto-saves source + settings to IndexedDB. Sample doc loads on first visit.
 | **UI** | runs from `file://` |
 | **Compute** | T0 generates PDFs in-browser · T3 your direct API call (Ω drafting only) |
 | **Storage** | IndexedDB for source + settings · PDF downloads to your device |
-| **Mesh** | `BroadcastChannel('fall-signal')` · prime 449 · responds to ping · `postMessage` API for `setSource` and `exportPdf` |
+| **Mesh** | `BroadcastChannel('fall-signal')` · prime 1427 · responds to ping · `postMessage` API for `setSource` and `exportPdf` |
 
 ---
 
@@ -133,4 +133,4 @@ Add to the `sizes` map in `getPageDims()` and an `<option>` in `#pgSize`. Sizes 
 - PDF writer is hand-rolled to keep the file <50KB; nothing fancy, just enough of PDF/1.4 to render text and images cleanly
 - Part of the FallStudio plan — Adobe Creative Cloud, sovereign, one HTML at a time
 
-⚒ Part of the [fall* estate](https://github.com/sjgant80-hub) · prime 449 · ◊·κ=1
+⚒ Part of the [fall* estate](https://github.com/sjgant80-hub) · prime 1427 · ◊·κ=1
