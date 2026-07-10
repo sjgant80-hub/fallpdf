@@ -1,6 +1,6 @@
 # ◊ FallPDF · sovereign PDF writer
 
-> The Acrobat wedge. Write in markdown · HTML · or plain text → real `.pdf` file. Single HTML, no server, no subscription.
+> The Acrobat wedge. Write in markdown · HTML · or plain text → real `.pdf` file. Single HTML, no server, not subscription-based.
 >
 > v1 · prime **1427** · MIT · ◊·κ=1
 
