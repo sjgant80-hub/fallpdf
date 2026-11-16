@@ -716,8 +716,11 @@ function parseMd(src){
   return blocks;
 }
 // inline transform → preview HTML
-function inlineHtml(s){return esc(s).replace(/\*\*(.+?)\*\*/g,'<strong>TBA</strong>').replace(/\*(.+?)\*/g,'<em>TBA</em>').replace(/`([^`]+)`/g,'<code>TBA</code>').replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="TBA">TBA</a>')}
-function inlinePlain(s){return s.replace(/\*\*(.+?)\*\*/g,'TBA').replace(/\*(.+?)\*/g,'TBA').replace(/`([^`]+)`/g,'TBA').replace(/\[([^\]]+)\]\([^)]+\)/g,'TBA')}
+// Callbacks, not '$1' strings: a pricing sweep on 2026-07-10 read '$1' as a price and replaced it with 'TBA', which made
+// every bold, italic, code and link render as the word TBA. A callback has no '$1' for a sweep to mistake.
+const safeHref=(u)=>/^\s*(javascript|data|vbscript):/i.test(u)?'#':u;
+function inlineHtml(s){return esc(s).replace(/\*\*(.+?)\*\*/g,(_,a)=>'<strong>'+a+'</strong>').replace(/\*(.+?)\*/g,(_,a)=>'<em>'+a+'</em>').replace(/`([^`]+)`/g,(_,a)=>'<code>'+a+'</code>').replace(/\[([^\]]+)\]\(([^)]+)\)/g,(_,t,u)=>'<a href="'+safeHref(u)+'">'+t+'</a>')}
+function inlinePlain(s){return s.replace(/\*\*(.+?)\*\*/g,(_,a)=>a).replace(/\*(.+?)\*/g,(_,a)=>a).replace(/`([^`]+)`/g,(_,a)=>a).replace(/\[([^\]]+)\]\([^)]+\)/g,(_,a)=>a)}
 function mdToHtml(src){return parseMd(src).map(b=>{switch(b.t){case'h':return`<h${b.n}>${inlineHtml(b.text)}</h${b.n}>`;case'p':return`<p>${inlineHtml(b.text)}</p>`;case'quote':return`<blockquote>${inlineHtml(b.text)}</blockquote>`;case'code':return`<pre>${esc(b.text)}</pre>`;case'ul':return'<ul>'+b.items.map(i=>`<li>${inlineHtml(i)}</li>`).join('')+'</ul>';case'ol':return'<ol>'+b.items.map(i=>`<li>${inlineHtml(i)}</li>`).join('')+'</ol>';case'hr':return'<hr>';case'img':return`<img src="${esc(b.src)}" alt="${esc(b.alt)}">`}return''}).join('\n')}
 
 // ════════════════════════════════════════════════════════════════
@@ -1000,9 +1003,7 @@ Set the page size, margins, font, and header/footer in the right panel. Hit **�
 
 ## Why this exists
 
-Adobe Acrobat is TBA. This is TBA. The Guild's audit checklist asks: *"does it actually do what the sales page claims?"* — open the exported PDF in any reader and judge for yourself.
-
-— prime 1427 · ◊·κ=1
+Adobe Acrobat is a subscription. This is a single page that runs in your browser, with no subscription and nothing uploaded. The Guild's audit checklist asks: *"does it actually do what the sales page claims?"* — open the exported PDF in any reader and judge for yourself.
 `;state.source=$('#editor').value;$('#docTitle').value='FallPDF demo';renderPreview();saveAll();toast('sample loaded')}
 
 // ════════════════════════════════════════════════════════════════
@@ -1011,7 +1012,7 @@ Adobe Acrobat is TBA. This is TBA. The Guild's audit checklist asks: *"does it a
 const TEMPLATES={
   'letter':'**[Your name]**\n[Your address]\n[Date]\n\n**[Recipient name]**\n[Recipient address]\n\nDear [Name],\n\n[Body of letter — replace with the actual content.]\n\nYours sincerely,\n\n[Your name]',
   'memo':'# Memorandum\n\n**To:** [Recipient]\n**From:** [You]\n**Date:** '+new Date().toLocaleDateString('en-GB')+'\n**Re:** [Subject]\n\n---\n\n## Summary\n[Short summary]\n\n## Detail\n[Detail]\n\n## Action required\n[What you need from the recipient]',
-  'invoice':'# Invoice\n\n**Invoice #:** INV-001\n**Date:** '+new Date().toLocaleDateString('en-GB')+'\n**Due:** [Date]\n\n**Bill to:**\n[Client name]\n[Client address]\n\n**From:**\n[Your name / company]\n[Your address]\n\n## Line items\n\n- Service 1 · TBA\n- Service 2 · TBA\n\n## Total\n\n**TBA**\n\nPayment via bank transfer to [account].',
+  'invoice':'# Invoice\n\n**Invoice #:** INV-001\n**Date:** '+new Date().toLocaleDateString('en-GB')+'\n**Due:** [Date]\n\n**Bill to:**\n[Client name]\n[Client address]\n\n**From:**\n[Your name / company]\n[Your address]\n\n## Line items\n\n- Service 1 · [amount]\n- Service 2 · [amount]\n\n## Total\n\n**[total]**\n\nPayment via bank transfer to [account].',
   'report':'# [Report title]\n\n**Prepared by:** [Author]\n**Date:** '+new Date().toLocaleDateString('en-GB')+'\n\n## Executive summary\n[One-paragraph summary]\n\n## Findings\n- Finding 1\n- Finding 2\n- Finding 3\n\n## Recommendation\n[Recommendation]\n\n## Appendix\n[Supporting detail]',
   'cv':'# [Your name]\n[email] · [phone] · [city]\n\n---\n\n## Profile\n[2-3 sentence summary]\n\n## Experience\n### [Most recent role] · [Company]\n*[Dates]*\n- Achievement\n- Achievement\n\n### [Previous role] · [Company]\n*[Dates]*\n- Achievement\n\n## Education\n### [Degree] · [Institution]\n*[Year]*\n\n## Skills\n[Skills, comma-separated]'
 };
